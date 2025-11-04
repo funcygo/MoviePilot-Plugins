@@ -25,17 +25,17 @@ class DoubanStatus(Enum):
 
 class ZvideoHelper(_PluginBase):
     # 插件名称
-    plugin_name = "极影视助手"
+    plugin_name = "极影视助手-funcygo"
     # 插件描述
-    plugin_desc = "极影视功能扩展"
+    plugin_desc = "极影视功能扩展-funcygo"
     # 插件图标
     plugin_icon = "zvideo.png"
     # 插件版本
     plugin_version = "1.7"
     # 插件作者
-    plugin_author = "DzAvril"
+    plugin_author = "funcygo"
     # 作者主页
-    author_url = "https://github.com/DzAvril"
+    author_url = "https://github.com/funcygo"
     # 插件配置项ID前缀
     plugin_config_prefix = "zvideohelper"
     # 加载顺序
