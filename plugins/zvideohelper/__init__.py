@@ -31,7 +31,7 @@ class ZvideoHelper(_PluginBase):
     # 插件图标
     plugin_icon = "zvideo.png"
     # 插件版本
-    plugin_version = "1.9"
+    plugin_version = "1.8"
     # 插件作者
     plugin_author = "funcygo"
     # 作者主页
@@ -45,13 +45,13 @@ class ZvideoHelper(_PluginBase):
 
     # 私有属性
     _enabled = False
-    _cron = 无
+    _cron = None
     _notify = False
     _onlyonce = False
     _sync_douban_status = False
     _clean_cache = False
     _use_douban_score = False
-    _douban_helper = 无
+    _douban_helper = None
     _cached_data: dict = {}
     _db_path = ""
     _cookie = ""
@@ -100,17 +100,17 @@ class ZvideoHelper(_PluginBase):
                 if self._notify:
                     self.post_message(
                         mtype=NotificationType.SiteMessage,
-                        title=f"【极影视助手-funcygo】"，
-                        text=f"极影视数据库路径不存在: {self._db_path}"，
+                        title=f"【极影视助手-funcygo】",  # 第103行：已修正全角逗号为半角
+                        text=f"极影视数据库路径不存在: {self._db_path}",
                     )
                 return
 
             self._scheduler = BackgroundScheduler(timezone=settings.TZ)
             logger.info(f"极影视助手-funcygo服务启动，立即运行一次")
-            self._scheduler。add_job(
-                func=self.do_job，
-                trigger="date"，
-                run_date=datetime.当前(tz=pytz.timezone(settings.TZ))
+            self._scheduler.add_job(
+                func=self.do_job,
+                trigger="date",
+                run_date=datetime.now(tz=pytz.timezone(settings.TZ))
                 + timedelta(seconds=3),
                 name="极影视助手-funcygo",
             )
@@ -120,8 +120,8 @@ class ZvideoHelper(_PluginBase):
 
             # 启动任务
             if self._scheduler.get_jobs():
-                self._scheduler。print_jobs()
-                self._scheduler。start()
+                self._scheduler.print_jobs()
+                self._scheduler.start()
 
     def get_state(self) -> bool:
         return self._enabled
@@ -208,12 +208,12 @@ class ZvideoHelper(_PluginBase):
                             self.post_message(
                                 channel=event.event_data.get("channel"),
                                 title="使用豆瓣评分完成！",
-                                userid=event.event_data。get("user"),
+                                userid=event.event_data.get("user"),
                             )
                     elif event_data.get("action") == "use_tmdb_score":
                         logger.info("收到命令，开始使用tmdb评分 ...")
                         self.post_message(
-                            channel=event.event_data。get("channel"),
+                            channel=event.event_data.get("channel"),
                             title="开始使用tmdb评分 ...",
                             userid=event.event_data.get("user"),
                         )
@@ -308,7 +308,7 @@ class ZvideoHelper(_PluginBase):
                 else:
                     logger.error(f"未找到豆瓣ID: {title}")
 
-        except sqlite3.错误 as e:
+        except sqlite3.Error as e:
             logger.error(f"An error occurred: {e}")
 
         finally:
@@ -320,7 +320,7 @@ class ZvideoHelper(_PluginBase):
             message = ""
             for item in watching_douban_id:
                 status = DoubanStatus.WATCHING.value
-                ret = self._douban_helper。set_watching_status(
+                ret = self._douban_helper.set_watching_status(
                     subject_id=item[1], status=status, private=True
                 )
                 if ret:
@@ -350,7 +350,7 @@ class ZvideoHelper(_PluginBase):
             collection_ids = cursor.fetchall()
             collection_ids = set([collection_id[0] for collection_id in collection_ids])
             meta_info_list = []
-            for collection_id 在 collection_ids:
+            for collection_id in collection_ids:
                 if self._should_stop:
                     logger.info("检测到中断请求，停止同步已看状态...")
                     break
@@ -569,7 +569,7 @@ class ZvideoHelper(_PluginBase):
                 logger.warning(f"{title} 评分格式异常：{score}，按0处理")
             
             # 构建更新数据
-            score_changed = old_score > 0 和 old_score != score
+            score_changed = old_score > 0 and old_score != score
             meta_info_dict["douban_score"] = score
             updated_meta_info_json = json.dumps(meta_info_dict, ensure_ascii=False)
             update_params.append((updated_meta_info_json, current_time_str, rowid))
@@ -590,7 +590,7 @@ class ZvideoHelper(_PluginBase):
         if update_params:
             try:
                 cursor.executemany(update_sql, update_params)
-                conn.提交()
+                conn.commit()
                 logger.info(f"批量更新完成，共更新 {len(update_params)} 条记录")
             except sqlite3.Error as e:
                 conn.rollback()
@@ -599,8 +599,8 @@ class ZvideoHelper(_PluginBase):
         # -------------------------- 5. 发送通知（保持原有逻辑） --------------------------
         if self._notify and len(message) > 0:
             self.post_message(
-                mtype=NotificationType.SiteMessage，
-                title="【极影视助手-funcygo】"，
+                mtype=NotificationType.SiteMessage,
+                title="【极影视助手-funcygo】",
                 text=message,
             )
         
@@ -621,7 +621,7 @@ class ZvideoHelper(_PluginBase):
             WHERE CAST(JSON_EXTRACT(meta_info, '$.douban_score') AS DECIMAL(3,1)) <> 0.0
             """
         )
-        conn.提交()
+        conn.commit()
 
         if cursor:
             cursor.close()
@@ -736,7 +736,7 @@ class ZvideoHelper(_PluginBase):
                                         "props": {
                                             "model": "clean_cache",
                                             "label": "清理缓存数据",
-                                        }，
+                                        },
                                     }
                                 ],
                             },
@@ -865,35 +865,35 @@ class ZvideoHelper(_PluginBase):
                                             "text": "极影视默认使用tmdb评分，勾选'使用豆瓣评分'后，将使用豆瓣评分。豆瓣无评分的继续使用tmdb评分",
                                         },
                                     }
-                                ]，
+                                ],
                             }
-                        ]，
-                    }，
+                        ],
+                    },
                     {
-                        "component": "VRow"，
+                        "component": "VRow",
                         "content": [
                             {
                                 "component": "VCol",
                                 "props": {
                                     "cols": 12,
-                                }，
+                                },
                                 "content": [
                                     {
                                         "component": "VAlert",
                                         "props": {
-                                            "type": "info"，
+                                            "type": "info",
                                             "variant": "tonal",
-                                            "text": "豆瓣评分更新周期是指多少天后重新获取豆瓣评分，防止评分变化。设为0则不更新已有评分"，
-                                        }，
+                                            "text": "豆瓣评分更新周期是指多少天后重新获取豆瓣评分，防止评分变化。设为0则不更新已有评分",
+                                        },
                                     }
                                 ],
                             }
-                        ]，
-                    }，
+                        ],
+                    },
                 ],
             }
         ], {
-            "enabled": False，
+            "enabled": False,
             "notify": False,
             "onlyonce": False,
             "cron": "0 0 * * *",
@@ -913,6 +913,6 @@ class ZvideoHelper(_PluginBase):
                 self._scheduler.remove_all_jobs()
                 if self._scheduler.running:
                     self._scheduler.shutdown()
-                self._scheduler = 无
+                self._scheduler = None
         except Exception as e:
             logger.error("退出插件失败：%s" % str(e))
