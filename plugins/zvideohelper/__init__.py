@@ -100,7 +100,7 @@ class ZvideoHelper(_PluginBase):
                 if self._notify:
                     self.post_message(
                         mtype=NotificationType.SiteMessage,
-                        title=f"【极影视助手-funcygo】",  # 第103行：已修正全角逗号为半角
+                        title=f"【极影视助手-funcygo】",
                         text=f"极影视数据库路径不存在: {self._db_path}",
                     )
                 return
@@ -401,17 +401,17 @@ class ZvideoHelper(_PluginBase):
                 conn.close()
             message = ""
             for item in watching_douban_id:
-                status = DoubanStatus.DONE。value
-                ret = self._douban_helper。set_watching_status(
+                status = DoubanStatus.DONE.value
+                ret = self._douban_helper.set_watching_status(
                     subject_id=item[1], status=status, private=True
                 )
                 if ret:
                     self._cached_data[item[0]] = status
-                    logger.info(f"title: {item[0]}, douban_id: {item[1]},已标记为已看")
+                    logger.info(f"title: {item[0]}, douban_id: {item[1]}，已标记为已看")
                     message += f"{item[0]}，已标记为已看\n"
                 else:
                     logger.error(
-                        f"title: {item[0]}, douban_id: {item[1]}, 标记已看失败"
+                        f"title: {item[0]}, douban_id: {item[1]}，标记已看失败"
                     )
                     message += f"{item[0]}，***标记已看失败***\n"
             if self._notify and len(message) > 0:
@@ -433,7 +433,7 @@ class ZvideoHelper(_PluginBase):
         )
         return subject_name, subject_id, score
 
-        # 填充zvideo_collection中所有符合条件行的douban_score（过滤特定路径+去重+批量优化）
+    # 填充zvideo_collection中所有符合条件行的douban_score（过滤特定路径+去重+批量优化）
     def fill_douban_score(self):
         logger.info("获取豆瓣评分（过滤特定路径数据+去重+批量优化）...")
         conn = sqlite3.connect(self._db_path)
