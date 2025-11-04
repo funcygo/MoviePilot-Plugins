@@ -56,8 +56,8 @@ class ZvideoHelper(_PluginBase):
     _db_path = ""
     _cookie = ""
     _douban_score_update_days = 0
-    # 定时器
-    _scheduler: Optional[BackgroundScheduler] = 无
+    # 定时器（修正：中文"无"→None）
+    _scheduler: Optional[BackgroundScheduler] = None
     _should_stop = False
 
     def init_plugin(self, config: dict = None):
@@ -214,14 +214,16 @@ class ZvideoHelper(_PluginBase):
                         logger.info("收到命令，开始使用tmdb评分 ...")
                         self.post_message(
                             channel=event.event_data.get("channel"),
-                            title="开始使用tmdb评分 ..."，
+                            # 修正：全角逗号→半角逗号
+                            title="开始使用tmdb评分 ...",
                             userid=event.event_data.get("user"),
                         )
                         self.use_tmdb_score()
                         if event:
                             self.post_message(
                                 channel=event.event_data.get("channel"),
-                                title="使用tmdb评分完成！"，
+                                # 修正：全角逗号→半角逗号
+                                title="使用tmdb评分完成！",
                                 userid=event.event_data.get("user"),
                             )
 
@@ -245,7 +247,8 @@ class ZvideoHelper(_PluginBase):
                     "id": "ZvideoHelper",
                     "name": "极影视助手-funcygo",
                     "trigger": CronTrigger.from_crontab(self._cron),
-                    "func": self.do_job，
+                    # 修正：全角逗号→半角逗号
+                    "func": self.do_job,
                     "kwargs": {},
                 }
             ]
@@ -268,13 +271,16 @@ class ZvideoHelper(_PluginBase):
             collection_ids = cursor.fetchall()
             collection_ids = set([collection_id[0] for collection_id in collection_ids])
             meta_info_list = []
-            for collection_id 在 collection_ids:
+            # 修正：中文"在"→英文"in"
+            for collection_id in collection_ids:
                 if self._should_stop:
                     logger.info("检测到中断请求，停止同步在看状态...")
                     break
                 cursor.execute(
-                    "SELECT meta_info FROM zvideo_collection WHERE collection_id = ? AND type = 200"，
-                    (collection_id,)，
+                    # 修正：全角逗号→半角逗号
+                    "SELECT meta_info FROM zvideo_collection WHERE collection_id = ? AND type = 200",
+                    # 修正：全角逗号→半角逗号
+                    (collection_id,),
                 )
                 rows = cursor.fetchall()
                 for row in rows:
@@ -288,7 +294,8 @@ class ZvideoHelper(_PluginBase):
                         logger.error(
                             f"An error occurred while decoding JSON for collection_id {collection_id}: {e}"
                         )
-            for meta_info 在 meta_info_list:
+            # 修正：中文"在"→英文"in"
+            for meta_info in meta_info_list:
                 if self._should_stop:
                     logger.info("检测到中断请求，停止同步在看状态...")
                     break
@@ -453,12 +460,13 @@ class ZvideoHelper(_PluginBase):
                 logger.info("检测到中断请求，停止获取豆瓣评分...")
                 break
             try:
-                rowid, extend_type, meta_info_json, updated_at = row
+                # 修正：SQL返回5个字段，解析时添加忽略path的"_"
+                rowid, extend_type, meta_info_json, updated_at, _ = row
                 # 合集，不处理
                 if extend_type == 7:
                     continue
                 meta_info_dict = json.loads(meta_info_json)
-                # 如果meta_info为空，跳过
+                # 如果meta_info中没有douban_score字段，跳过
                 if meta_info_dict.get("douban_score") is None:
                     continue
                 title = meta_info_dict["title"]
@@ -807,23 +815,23 @@ class ZvideoHelper(_PluginBase):
                                             "text": "极影视默认使用tmdb评分，勾选'使用豆瓣评分'后，将使用豆瓣评分。豆瓣无评分的继续使用tmdb评分",
                                         },
                                     }
-                                ],
+                                ]，
                             }
-                        ],
-                    },
+                        ]，
+                    }，
                     {
                         "component": "VRow",
                         "content": [
                             {
-                                "component": "VCol",
+                                "component": "VCol"，
                                 "props": {
-                                    "cols": 12,
-                                },
+                                    "cols": 12，
+                                }，
                                 "content": [
                                     {
-                                        "component": "VAlert",
+                                        "component": "VAlert"，
                                         "props": {
-                                            "type": "info",
+                                            "type": "info"，
                                             "variant": "tonal",
                                             "text": "豆瓣评分更新周期是指多少天后重新获取豆瓣评分，防止评分变化。设为0则不更新已有评分",
                                         },
@@ -832,7 +840,7 @@ class ZvideoHelper(_PluginBase):
                             }
                         ],
                     },
-                ],
+                ]，
             }
         ], {
             "enabled": False,
