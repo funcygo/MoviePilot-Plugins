@@ -57,7 +57,7 @@ class ZvideoHelper(_PluginBase):
     _cookie = ""
     _douban_score_update_days = 0
     # 定时器
-    _scheduler: Optional[BackgroundScheduler] = None
+    _scheduler: Optional[BackgroundScheduler] = 无
     _should_stop = False
 
     def init_plugin(self, config: dict = None):
@@ -100,19 +100,19 @@ class ZvideoHelper(_PluginBase):
                 if self._notify:
                     self.post_message(
                         mtype=NotificationType.SiteMessage,
-                        title=f"【极影视助手】",
+                        title=f"【极影视助手-funcygo】",
                         text=f"极影视数据库路径不存在: {self._db_path}",
                     )
                 return
 
             self._scheduler = BackgroundScheduler(timezone=settings.TZ)
-            logger.info(f"极影视助手服务启动，立即运行一次")
+            logger.info(f"极影视助手-funcygo服务启动，立即运行一次")
             self._scheduler.add_job(
                 func=self.do_job,
                 trigger="date",
                 run_date=datetime.now(tz=pytz.timezone(settings.TZ))
                 + timedelta(seconds=3),
-                name="极影视助手",
+                name="极影视助手-funcygo",
             )
             # 关闭一次性开关
             self._onlyonce = False
@@ -243,7 +243,7 @@ class ZvideoHelper(_PluginBase):
             return [
                 {
                     "id": "ZvideoHelper",
-                    "name": "极影视助手",
+                    "name": "极影视助手-funcygo",
                     "trigger": CronTrigger.from_crontab(self._cron),
                     "func": self.do_job,
                     "kwargs": {},
@@ -335,7 +335,7 @@ class ZvideoHelper(_PluginBase):
             if self._notify and len(message) > 0:
                 self.post_message(
                     mtype=NotificationType.SiteMessage,
-                    title="【极影视助手】",
+                    title="【极影视助手-funcygo】",
                     text=message,
                 )
 
@@ -417,7 +417,7 @@ class ZvideoHelper(_PluginBase):
             if self._notify and len(message) > 0:
                 self.post_message(
                     mtype=NotificationType.SiteMessage,
-                    title="【极影视助手】",
+                    title="【极影视助手-funcygo】",
                     text=message,
                 )
 
@@ -536,7 +536,7 @@ class ZvideoHelper(_PluginBase):
         if self._notify and len(message) > 0:
             self.post_message(
                 mtype=NotificationType.SiteMessage,
-                title="【极影视助手】",
+                title="【极影视助手-funcygo】",
                 text=message,
             )
         if cursor:
