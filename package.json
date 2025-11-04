@@ -86,12 +86,12 @@
         }
     },
     "ZvideoHelper": {
-        "name": "极影视助手",
-        "description": "极影视功能扩展",
+        "name": "极影视助手-funcygo",
+        "description": "极影视功能扩展-funcygo",
         "labels": "媒体库",
         "version": "1.7",
         "icon": "zvideo.png",
-        "author": "DzAvril",
+        "author": "funcygo",
         "level": 1,
         "v2": true,
         "history": {
