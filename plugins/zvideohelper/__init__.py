@@ -401,8 +401,8 @@ class ZvideoHelper(_PluginBase):
                 conn.close()
             message = ""
             for item in watching_douban_id:
-                status = DoubanStatus.DONE.value
-                ret = self._douban_helper.set_watching_status(
+                status = DoubanStatus.DONE。value
+                ret = self._douban_helper。set_watching_status(
                     subject_id=item[1], status=status, private=True
                 )
                 if ret:
@@ -433,7 +433,7 @@ class ZvideoHelper(_PluginBase):
         )
         return subject_name, subject_id, score
 
-    # 填充zvideo_collection中所有符合条件行的douban_score（过滤特定路径+去重+批量优化）
+        # 填充zvideo_collection中所有符合条件行的douban_score（过滤特定路径+去重+批量优化）
     def fill_douban_score(self):
         logger.info("获取豆瓣评分（过滤特定路径数据+去重+批量优化）...")
         conn = sqlite3.connect(self._db_path)
@@ -507,9 +507,14 @@ class ZvideoHelper(_PluginBase):
                     batch_update_data.append((rowid, title, old_score, meta_info_dict))
                 else:
                     no_update_count += 1
+            # 补充缺失的except块（捕获单条记录解析异常，避免整个循环崩溃）
+            except Exception as e:
+                logger.error(f"筛选待更新记录失败（rowid：{row[0] if row else '未知'}）：{e}")
+                continue
         
         logger.info(f"待更新记录数：{len(batch_update_data)}，无需更新记录数：{no_update_count}")
         if not batch_update_data:
+            cursor.close()
             conn.close()
             return
         
@@ -533,7 +538,7 @@ class ZvideoHelper(_PluginBase):
                 if title in title_score_map:
                     score = title_score_map[title]
                 else:
-                    # 调用豆瓣接口（保持原有逻辑）
+                    # 调用豆瓣接口（包裹try-except，捕获单条查询异常）
                     try:
                         _, _, score = self.get_douban_info_by_name(title)
                         title_score_map[title] = score  # 缓存结果
@@ -604,7 +609,7 @@ class ZvideoHelper(_PluginBase):
                 text=message,
             )
         
-        # 关闭连接
+        # 关闭连接（确保资源释放）
         cursor.close()
         conn.close()
 
