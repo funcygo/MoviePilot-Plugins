@@ -214,14 +214,14 @@ class ZvideoHelper(_PluginBase):
                         logger.info("收到命令，开始使用tmdb评分 ...")
                         self.post_message(
                             channel=event.event_data.get("channel"),
-                            title="开始使用tmdb评分 ...",
+                            title="开始使用tmdb评分 ..."，
                             userid=event.event_data.get("user"),
                         )
                         self.use_tmdb_score()
                         if event:
                             self.post_message(
                                 channel=event.event_data.get("channel"),
-                                title="使用tmdb评分完成！",
+                                title="使用tmdb评分完成！"，
                                 userid=event.event_data.get("user"),
                             )
 
@@ -245,7 +245,7 @@ class ZvideoHelper(_PluginBase):
                     "id": "ZvideoHelper",
                     "name": "极影视助手-funcygo",
                     "trigger": CronTrigger.from_crontab(self._cron),
-                    "func": self.do_job,
+                    "func": self.do_job，
                     "kwargs": {},
                 }
             ]
@@ -268,13 +268,13 @@ class ZvideoHelper(_PluginBase):
             collection_ids = cursor.fetchall()
             collection_ids = set([collection_id[0] for collection_id in collection_ids])
             meta_info_list = []
-            for collection_id in collection_ids:
+            for collection_id 在 collection_ids:
                 if self._should_stop:
                     logger.info("检测到中断请求，停止同步在看状态...")
                     break
                 cursor.execute(
-                    "SELECT meta_info FROM zvideo_collection WHERE collection_id = ? AND type = 200",
-                    (collection_id,),
+                    "SELECT meta_info FROM zvideo_collection WHERE collection_id = ? AND type = 200"，
+                    (collection_id,)，
                 )
                 rows = cursor.fetchall()
                 for row in rows:
@@ -288,7 +288,7 @@ class ZvideoHelper(_PluginBase):
                         logger.error(
                             f"An error occurred while decoding JSON for collection_id {collection_id}: {e}"
                         )
-            for meta_info in meta_info_list:
+            for meta_info 在 meta_info_list:
                 if self._should_stop:
                     logger.info("检测到中断请求，停止同步在看状态...")
                     break
@@ -433,13 +433,19 @@ class ZvideoHelper(_PluginBase):
         )
         return subject_name, subject_id, score
 
-    # 填充zvideo_collection中所有行的douban_score
+    # 填充zvideo_collection中所有符合条件行的douban_score（过滤特定路径）
     def fill_douban_score(self):
-        logger.info("获取豆瓣评分...")
+        logger.info("获取豆瓣评分（过滤特定路径数据）...")
         conn = sqlite3.connect(self._db_path)
         conn.text_factory = str
         cursor = conn.cursor()
-        cursor.execute("SELECT rowid, extend_type, meta_info, updated_at FROM zvideo_collection")
+        # 关键修改：替换为带左连接和路径过滤的SQL
+        cursor.execute("""
+        SELECT zc.rowid, zc.extend_type, zc.meta_info, zc.updated_at, zl.path 
+        FROM zvideo_collection zc 
+        LEFT JOIN zvideo_list zl ON zc.collection_id = zl.collection_id 
+        WHERE zl.path NOT LIKE '/tmp/zfsv3/sata11/13107640652/data/RR%'
+        """)
         rows = cursor.fetchall()
         message = ""
         for row in rows:
