@@ -1,15 +1,16 @@
 {
-  "name": "豆瓣评分修正",
-  "id": "DoubanRatingSync",
-  "version": "1.1",
-  "author": "funcygo",
-  "author_url": "https://github.com/funcygo",
-  "description": "同步豆瓣评分至极影视（优先IMDb/TMDB ID匹配，支持进度追踪、跳过明细、30天有效期可配置）",
-  "icon": "https://img9.doubanio.com/favicon.ico",
-  "level": 1,
-  "v2": true,
-  "history": {
-    "v1.1": "1. 新增ID精准匹配（IMDb/TMDB）；2. 智能重试+限流优化；3. 缓存自动清理；4. 新增同步类型筛选和单次最大数量配置；5. 完善跳过/失败明细日志",
-    "v1.0": "初始版本，支持豆瓣评分同步、进度追踪、30天有效期可配置"
-  }
+    "DoubanRatingSync": {
+        "name": "豆瓣评分修正",
+        "description": "同步豆瓣评分至极影视（优先IMDb/TMDB ID匹配，支持进度追踪、跳过明细、30天有效期可配置）",
+        "labels": "媒体库",
+        "version": "1.1",
+        "icon": "zvideo.png",
+        "author": "funcygo",
+        "level": 1,
+        "v2": true,
+        "history": {
+            "v1.1": "1. 新增ID精准匹配（IMDb/TMDB）；2. 智能重试+限流优化；3. 缓存自动清理；4. 新增同步类型筛选和单次最大数量配置；5. 完善跳过/失败明细日志",
+            "v1.0": "初始版本，支持豆瓣评分同步、进度追踪、30天有效期可配置"
+        }
+    }
 }
