@@ -1,24 +1,13 @@
 {
-    "ZvideoHelper": {
-        "name": "极影视助手-funcygo",
-        "description": "极影视功能扩展-funcygo",
-        "labels": "媒体库",
-        "version": "1.9",
-        "icon": "zvideo.png",
-        "author": "funcygo",
-        "level": 1,
-        "v2": true,
-        "history": {
-            "v1.9": "优化性能",
-            "v1.8": "funcygo自定义",
-            "v1.7": "细节优化",
-            "v1.6": "增加定期更新豆瓣评分",
-            "v1.5": "适配新版极影视",
-            "v1.4": "修复请求失败后返回值数量不正确的问题",
-            "v1.3": "降低对豆瓣接口的请求频率",
-            "v1.2": "修复无法获取豆瓣评分的问题",
-            "v1.1": "支持将极影视评分修改为豆瓣评分",
-            "v1.0": "同步极影视在看/已看状态到豆瓣"
-        }
-    }
+  "name": "豆瓣评分修正",
+  "id": "DoubanRatingSync",
+  "version": "1.0",
+  "author": "funcygo",
+  "author_url": "https://github.com/funcygo",
+  "description": "同步豆瓣评分至极影视，无豆瓣评分则保留原有评分",
+  "icon": "https://img9.doubanio.com/favicon.ico",
+  "level": 1,
+  "history": {
+    "v1.0": "初始版本，仅保留豆瓣评分同步核心功能"
+  }
 }
