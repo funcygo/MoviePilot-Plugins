@@ -1,24 +1,14 @@
 {
-    "ZvideoHelper": {
-        "name": "极影视助手-funcygo",
-        "description": "极影视功能扩展-funcygo",
-        "labels": "媒体库",
-        "version": "1.9",
-        "icon": "zvideo.png",
-        "author": "funcygo",
-        "level": 1,
-        "v2": true,
-        "history": {
-            "v1.9": "优化性能",
-            "v1.8": "funcygo自定义",
-            "v1.7": "细节优化",
-            "v1.6": "增加定期更新豆瓣评分",
-            "v1.5": "适配新版极影视",
-            "v1.4": "修复请求失败后返回值数量不正确的问题",
-            "v1.3": "降低对豆瓣接口的请求频率",
-            "v1.2": "修复无法获取豆瓣评分的问题",
-            "v1.1": "支持将极影视评分修改为豆瓣评分",
-            "v1.0": "同步极影视在看/已看状态到豆瓣"
-        }
-    }
+  "name": "豆瓣评分修正",
+  "id": "DoubanRatingSync",
+  "version": "1.1",
+  "author": "funcygo",
+  "author_url": "https://github.com/funcygo",
+  "description": "同步豆瓣评分至极影视（优先IMDb/TMDB ID匹配，支持进度追踪、跳过明细、30天有效期可配置）",
+  "icon": "https://img9.doubanio.com/favicon.ico",
+  "level": 1,
+  "history": {
+    "v1.1": "1. 新增ID精准匹配（IMDb/TMDB）；2. 智能重试+限流优化；3. 缓存自动清理；4. 新增同步类型筛选和单次最大数量配置；5. 完善跳过/失败明细日志",
+    "v1.0": "初始版本，支持豆瓣评分同步、进度追踪、30天有效期可配置"
+  }
 }
