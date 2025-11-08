@@ -189,7 +189,7 @@ class DoubanRatingSync(_PluginBase):
     plugin_name = "豆瓣评分修正"
     plugin_desc = "同步豆瓣评分至极影视（优先ID匹配，无评分保留原数据，支持进度追踪）"
     plugin_icon = "https://img9.doubanio.com/favicon.ico"
-    plugin_version = "1.1"  # 优化版版本号
+    plugin_version = "1.2"  # 优化版版本号
     plugin_author = "funcygo"
     author_url = "https://github.com/funcygo"
     plugin_config_prefix = "doubanratingsync"
@@ -331,6 +331,9 @@ class DoubanRatingSync(_PluginBase):
                 text="豆瓣评分同步任务已完成！可查看日志了解详情",
                 userid=event.event_data.get("user")
             )
+
+    def get_api(self) -> List[Dict[str, Any]]:
+        pass
 
     def get_service(self) -> List[Dict[str, Any]]:
         """注册公共定时服务"""
